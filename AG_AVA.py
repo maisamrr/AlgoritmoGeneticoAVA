@@ -7,9 +7,9 @@ Autores:
 - Diego Alexandre da Silva
 - Maisa Vale Moreira
 
-3° Exercício Prático:
-Parte 1: Implementar a função de avaliação, na linguagem de programação desejada.
-Parte 2: Implementar o método da roleta, na linguagem de programação desejada.
+•4°
+Lista de exercício prático: Implementação do cruzamento em ponto único e
+mutação, na linguagem de programação escolhida.
 """
 
 import random
@@ -126,7 +126,7 @@ def codificar_populacao(populacao):
     for numero in populacao:
         numero_binario = bin(numero)
         formata_numero = numero_binario[2:] # retira_0b 
-        preencher_zeros = formata_numero.zfill(8) # Tamanho max 8 bits
+        preencher_zeros = formata_numero.zfill(4) # Tamanho max 8 bits
         populacao_binaria.append(preencher_zeros)
     return populacao_binaria
 
@@ -230,7 +230,7 @@ def selecao_roleta(populacao_fitness):
     fitness_percentual = []
     selecao_parcial = []
     populacao_fitness.sort()
-    print("Valores ordenados em ordem crescente:", populacao_fitness)
+    #print("Valores ordenados em ordem crescente:", populacao_fitness)
     parcelada= 1
     media_limite = 0.0
     pares_individuos = 0.5
@@ -240,7 +240,7 @@ def selecao_roleta(populacao_fitness):
         y = x-1
         media_limite = media_limite + (populacao_fitness[x] - populacao_fitness[y])    
     media_limite = media_limite / len(populacao_fitness)
-    print('Media_limite: ', media_limite)
+    #print('Media_limite: ', media_limite)
 
     for x in range(1, len(populacao_fitness)):
         y = x-1
@@ -256,7 +256,7 @@ def selecao_roleta(populacao_fitness):
     for x in range(len(lista_parcelada)):
         fitness_percentual.append((lista_parcelada[x] / len(populacao_fitness)) * 100)
     
-    print('fitness_percentual: ', fitness_percentual)
+    #print('fitness_percentual: ', fitness_percentual)
     soma = []
     numeros_sorteados = []
     giro_atual = 0
@@ -287,6 +287,53 @@ def selecao_roleta(populacao_fitness):
 
     return valores_selecionados
 
+
+def cruzamento_ponto_unico(pais):
+    # Função para realizar o cruzamento de ponto único em um algoritmo genético
+    # Pais: lista contendo dois indivíduos selecionados para reprodução
+    
+    pai = pais[0]
+    mae = pais[1]
+
+    print("Pai: ", pai)
+    print("Mae: ", mae)
+
+    comprimento_cromossomo = len(pai)
+    
+    # Definindo um ponto de corte aleatório dentro do cromossomo
+    ponto_corte = random.randint(1, comprimento_cromossomo - 1)
+    print('Ponto corte[inicio-direita]: ',ponto_corte)
+    
+    # Realizando o cruzamento de ponto único para gerar os dois filhos
+    filho_1 = pai[:ponto_corte] + mae[ponto_corte:]
+    filho_2 = mae[:ponto_corte] + pai[ponto_corte:]
+    
+    print("Filho 1:", filho_1)
+    print("Filho 2:", filho_2)
+
+    return (filho_1)
+
+def mutacao(individuo, taxa_mutacao):
+    # Convertendo a taxa de mutação para uma probabilidade entre 0 e 1
+    taxa_mutacao = min(1, max(0, taxa_mutacao))
+    print('Taxa Mutacao: ', taxa_mutacao)
+    valor_aleatorio = 0
+    # Realizando a mutação para cada gene do cromossomo
+    cromossomo_mutado = ""
+    for gene in individuo:
+        valor_aleatorio = random.random()
+        print('Valor Aleatorio Gene: ', valor_aleatorio)
+        if  valor_aleatorio < taxa_mutacao:
+            # Se a probabilidade de mutação for menor que a taxa de mutação,
+            cromossomo_mutado += str(1 - int(gene))
+        else:
+            cromossomo_mutado += gene
+
+    print('Individuo Original: ', individuo)
+    print('Individuo Mutado: ',cromossomo_mutado)
+    return cromossomo_mutado
+
+
 def main():
     qnt_grupo = int(input('Informe a quantidade de grupos desejada: '))
     arquivo_csv = abrir_arquivo(nome_arquivo)
@@ -300,15 +347,17 @@ def main():
     populacao_binaria = codificar_populacao(populacao_criada)
     populacao_decimal = decodificar_populacao(populacao_binaria)
     print('Populacao criada: ', populacao_criada)
-    #print('Populacao binaria', populacao_binaria)
+    print('Populacao binaria', populacao_binaria)
     #print("População decimal:", populacao_decimal)
 
     populacao_fitness = funcao_fitness(parametros_algoritmo, dados_formatado)
-    print('Valores Fitness: ', populacao_fitness)
+    #print('Valores Fitness: ', populacao_fitness)
     populacao_roleta = selecao_roleta(populacao_fitness)
-    print('Populacao Roleta:', populacao_roleta)
+    #print('Populacao Roleta:', populacao_roleta)
+    populacao_teste_cruzamento = (populacao_binaria[0], populacao_binaria[1])
+    populacao_cruzamento = cruzamento_ponto_unico(populacao_teste_cruzamento)
+    taxa_mutacao = 0.5
+    cromossomo_mutado = mutacao(populacao_cruzamento, taxa_mutacao)
     
 if __name__ == "__main__":
     main()
-
-
