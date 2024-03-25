@@ -355,8 +355,10 @@ def main():
     populacao_roleta = selecao_roleta(populacao_fitness)
     #print('Populacao Roleta:', populacao_roleta)
     populacao_teste_cruzamento = (populacao_binaria[0], populacao_binaria[1])
+    print('---Cruzamento---')
     populacao_cruzamento = cruzamento_ponto_unico(populacao_teste_cruzamento)
     taxa_mutacao = 0.5
+    print('---Mutação---')
     cromossomo_mutado = mutacao(populacao_cruzamento, taxa_mutacao)
     
 if __name__ == "__main__":

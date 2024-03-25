@@ -7,7 +7,7 @@ idade_faixa = (11, 21)
 disciplina_faixa = (1, 4)
 tempo_acesso_faixa = (0, 90) 
 hora_acesso_faixa = (8, 22)
-tamanho_populacao = 5
+tamanho_populacao = 100
 
 # Função para gerar dados aleatórios
 def gerar_dados_aleatorios(matricula):
